@@ -1,4 +1,4 @@
-package com.example.edgar.dice;
+package com.edgarhandev.edgar.dice;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

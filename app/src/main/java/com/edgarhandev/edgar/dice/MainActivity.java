@@ -1,15 +1,18 @@
-package com.example.edgar.dice;
+package com.edgarhandev.edgar.dice;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Dice> dices;
     private Button roll;
     private int numOfDices;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,19 @@ public class MainActivity extends AppCompatActivity {
                 rollDice();
             }
         });
+
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        String YOUR_ADMOB_APP_ID = "ca-app-pub-5445092696369420~5615527026";
+        MobileAds.initialize(this, YOUR_ADMOB_APP_ID);
+
+        mAdView = (AdView)findViewById(R.id.adView);
+        //AdView mAdView = new AdView(this);
+        //mAdView.setAdSize(AdSize.BANNER);
+        //mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        // TODO: Add adView to your view hierarchy.
+        //linearLayout.addView(mAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     public void rollDice() {

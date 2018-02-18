@@ -1,4 +1,4 @@
-package com.example.edgar.dice;
+package com.edgarhandev.edgar.dice;
 
 import org.junit.Test;
 
