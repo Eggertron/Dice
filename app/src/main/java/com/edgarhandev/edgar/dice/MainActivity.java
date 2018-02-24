@@ -22,15 +22,54 @@ public class MainActivity extends AppCompatActivity {
     private Button roll;
     private int numOfDices;
     private AdView mAdView;
+    private TextView numOfDicesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numOfDices = 5;
         linearLayout = (LinearLayout)findViewById(R.id.linearlayout);
+        roll = (Button)findViewById(R.id.roll);
+        roll.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                rollDice();
+            }
+        });
+        init();
+
+        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
+        // sample adunitid="ca-app-pub-3940256099942544/6300978111"
+        String YOUR_ADMOB_APP_ID = "ca-app-pub-5445092696369420~5615527026";
+        MobileAds.initialize(this, YOUR_ADMOB_APP_ID);
+
+        mAdView = (AdView)findViewById(R.id.adView);
+        //AdView mAdView = new AdView(this);
+        //mAdView.setAdSize(AdSize.BANNER);
+        // ads:adUnitId="ca-app-pub-5445092696369420/4517588848"
+        //mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        // TODO: Add adView to your view hierarchy.
+        //linearLayout.addView(mAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+    }
+
+    public void init() {
+        linearLayout.removeAllViews();
+        numOfDicesText = findViewById(R.id.numOfDiceText);
+        numOfDices = Integer.parseInt(numOfDicesText.getText().toString());
         textViews = new ArrayList<TextView>();
+
+        // sanity check
+        if (numOfDices < 1) {
+            numOfDicesText.setText("1");
+            numOfDices = 1;
+        }
+        if (numOfDices > 10) {
+            numOfDicesText.setText("10");
+            numOfDices = 10;
+        }
+
         for (int i = 0; i < numOfDices; i++) {
             textViews.add(new TextView(this));
             textViews.get(i).setText("this is " + i + ".");
@@ -40,28 +79,20 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < numOfDices; i++) {
             dices.add(new Dice());
         }
-        roll = (Button)findViewById(R.id.roll);
-        roll.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                rollDice();
-            }
-        });
-
-        // Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713
-        String YOUR_ADMOB_APP_ID = "ca-app-pub-5445092696369420~5615527026";
-        MobileAds.initialize(this, YOUR_ADMOB_APP_ID);
-
-        mAdView = (AdView)findViewById(R.id.adView);
-        //AdView mAdView = new AdView(this);
-        //mAdView.setAdSize(AdSize.BANNER);
-        //mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-        // TODO: Add adView to your view hierarchy.
-        //linearLayout.addView(mAdView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
     }
 
     public void rollDice() {
+        // check for a change in number of dices
+        try {
+            if (numOfDices != Integer.parseInt(numOfDicesText.getText().toString())) {
+                init();
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            numOfDicesText.setText("1");
+            init();
+        }
         for (int i = 0; i < numOfDices; i++) {
             textViews.get(i).setText("Dice " + (i+1) + " rolled a " + dices.get(i).roll());
         }

@@ -5,17 +5,37 @@
     android:layout_height="match_parent"
     tools:context="com.edgarhandev.edgar.dice.MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="Roll"
+        android:id="@+id/roll"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="Number Of Dice: "
+        android:id="@+id/numberOfDiceText"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/numberOfDiceText"
+        android:id="@+id/numOfDiceText"
+        android:ems="10"
+        android:hint="Between 1 and 10"
+        android:inputType="number"
+        android:text="1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/roll"
         android:id="@+id/linearlayout"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Roll"
-            android:id="@+id/roll"/>
 
     </LinearLayout>
 
