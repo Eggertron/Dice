@@ -1,9 +1,11 @@
 package com.edgarhandev.edgar.dice;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private List<TextView> textViews;
     private List<Dice> dices;
+    private List<ImageView> imageViews;
     private Button roll;
     private int numOfDices;
     private AdView mAdView;
@@ -30,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         linearLayout = (LinearLayout)findViewById(R.id.linearlayout);
+        DiceImages.load(this); // load the assets
+
         roll = (Button)findViewById(R.id.roll);
         roll.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         numOfDicesText = findViewById(R.id.numOfDiceText);
         numOfDices = Integer.parseInt(numOfDicesText.getText().toString());
         textViews = new ArrayList<TextView>();
+        imageViews = new ArrayList<ImageView>();
 
         // sanity check
         if (numOfDices < 1) {
@@ -70,10 +76,16 @@ public class MainActivity extends AppCompatActivity {
             numOfDices = 10;
         }
 
+        ImageView imageView;
         for (int i = 0; i < numOfDices; i++) {
             textViews.add(new TextView(this));
             textViews.get(i).setText("this is " + i + ".");
+            imageView = new ImageView(this);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(128, 128));
+            imageView.setImageBitmap(DiceImages.dice01);
+            imageViews.add(imageView);
             linearLayout.addView(textViews.get(i));
+            linearLayout.addView(imageView);
         }
         dices = new ArrayList<Dice>();
         for (int i = 0; i < numOfDices; i++) {
@@ -93,8 +105,11 @@ public class MainActivity extends AppCompatActivity {
             numOfDicesText.setText("1");
             init();
         }
+        int rolledNumber;
         for (int i = 0; i < numOfDices; i++) {
-            textViews.get(i).setText("Dice " + (i+1) + " rolled a " + dices.get(i).roll());
+            rolledNumber = dices.get(i).roll();
+            textViews.get(i).setText("Dice " + (i+1) + " rolled a " + rolledNumber);
+            imageViews.get(i).setImageBitmap(DiceImages.getImage(rolledNumber));
         }
     }
 }
