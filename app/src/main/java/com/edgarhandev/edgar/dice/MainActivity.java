@@ -1,9 +1,11 @@
 package com.edgarhandev.edgar.dice;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayout;
     private List<TextView> textViews;
     private List<Dice> dices;
+    private List<ImageView> imageViews;
     private Button roll;
     private int numOfDices;
     private AdView mAdView;
@@ -28,13 +31,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        DiceImages.load(this); // load the assets
         numOfDices = 5;
         linearLayout = (LinearLayout)findViewById(R.id.linearlayout);
         textViews = new ArrayList<TextView>();
+        imageViews = new ArrayList<ImageView>();
+        ImageView tmpImageView;
         for (int i = 0; i < numOfDices; i++) {
             textViews.add(new TextView(this));
             textViews.get(i).setText("this is " + i + ".");
+            tmpImageView = new ImageView(this);
+            tmpImageView.setLayoutParams(new LinearLayout.LayoutParams(128, 128));
+            tmpImageView.setImageBitmap(DiceImages.dice01);
+            imageViews.add(tmpImageView);
             linearLayout.addView(textViews.get(i));
+            linearLayout.addView(tmpImageView);
         }
         dices = new ArrayList<Dice>();
         for (int i = 0; i < numOfDices; i++) {
@@ -62,8 +73,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void rollDice() {
+        int rolledNumber;
         for (int i = 0; i < numOfDices; i++) {
-            textViews.get(i).setText("Dice " + (i+1) + " rolled a " + dices.get(i).roll());
+            rolledNumber = dices.get(i).roll();
+            textViews.get(i).setText("Dice " + (i+1) + " rolled a " + rolledNumber);
+            imageViews.get(i).setImageBitmap(DiceImages.getImage(rolledNumber));
         }
     }
 }
